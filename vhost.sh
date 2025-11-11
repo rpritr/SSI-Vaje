@@ -11,6 +11,7 @@
         sudo echo "DocumentRoot /var/www/$domain" >> /etc/apache2/sites-available/$domain.conf
         sudo echo "ErrorLog \${APACHE_LOG_DIR}/$domain.error.log" >> /etc/apache2/sites-available/$domain.conf
         sudo echo "CustomLog \${APACHE_LOG_DIR}/$domain.access.log combined" >> /etc/apache2/sites-available/$domain.conf
+        sudo echo "</VirtualHost>" >> /etc/apache2/sites-available/$domain.conf
 
         echo "Virtual host created successfully"
 
@@ -24,7 +25,7 @@
         echo "Virtual host created successfuly"
 
         echo "Enabling virtual host"
-        sudo a2ensite /etc/apache2/sites-available/$domain.conf
+        sudo a2ensite $domain.conf
 
         echo "Virtual host enabled"
 
