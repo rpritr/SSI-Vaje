@@ -22,4 +22,14 @@
         sudo echo $domain >> /var/www/$domain/index.html
 
         echo "Virtual host created successfuly"
+
+        echo "Enabling virtual host"
+        sudo a2ensite /etc/apache2/sites-available/$domain.conf
+
+        echo "Virtual host enabled"
+
+        echo "Reloading apache2 configuration"
+        sudo systemctl reload apache2
+        echo "Apache2 reloaded successfully"
+
         exit 0
