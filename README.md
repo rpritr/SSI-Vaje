@@ -25,8 +25,7 @@ Vsaka vaja se nahaja v svoji mapi, znotraj katere je datoteka **README.md**, ki 
 | `lab06` | Kompleksna Bash vaja: ustvarjanje, procesiranje, arhiviranje in analiza datotek |
 | `lab07` | Upravljanje uporabnikov in skupin (adduser, groupadd, sudo, zaklepanje računov) |
 | `lab08` | Namestitev LAMP (Apache2, MySQL/MariaDB, PHP) in konfiguracija Virtual Host strežnikov |
-| `lab09` | Projekt — Vzpostavitev dveh strežnikov v oblaku (spletni in delovni strežnik)
- |
+| `lab09` | Projekt — Vzpostavitev dveh strežnikov v oblaku (spletni in delovni strežnik) |
 
 ---
 
