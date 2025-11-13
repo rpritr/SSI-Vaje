@@ -1,8 +1,8 @@
-# Vaja: Dovoljenja in delo z arhivi v Linuxu
+# Vaja 2: Dovoljenja in delo z arhivi v Linuxu
 
 ## Vaja 1: CHMOD tabele
 
-Izpolni tabelo za spodnje primere ukazov:
+Izpolnite tabelo za spodnje primere ukazov:
 
 ### Pretvorba CHMOD ukazov v simbolni zapis
 
@@ -34,12 +34,12 @@ Izpolni tabelo za spodnje primere ukazov:
 
 ## Vaja 2: Osnovna uporaba ukaza chmod
 
-### 1. Ustvari datoteko
+### 1. Ustvarite datoteko
 ```bash
 touch test.txt
 ```
 
-### 2. Preveri dovoljenja
+### 2. Preverite dovoljenja
 ```bash
 ls -l test.txt
 ```
@@ -48,13 +48,13 @@ ls -l test.txt
 - Nato 3× po 3 znaki: pravice za **lastnika**, **skupino**, **ostale**
 - Nato: lastnik, skupina, velikost, datum, ime
 
-### 3. Odstrani dovoljenja pisanja za vse uporabnike
+### 3. Odstranite dovoljenja pisanja za vse uporabnike
 ```bash
 chmod a-w test.txt
 ls -l test.txt
 ```
 
-### 4. Dovoli pravice samo lastniku (rwx) — oktalno
+### 4. Dovolite pravice samo lastniku (rwx) — oktalno
 ```bash
 chmod 700 test.txt
 ```
@@ -63,12 +63,12 @@ chmod 700 test.txt
 
 ## Upravljanje dovoljenj za skupino
 
-### 1. Ustvari mapo
+### 1. Ustvarite mapo
 ```bash
 mkdir my_folder
 ```
 
-### 2. Nastavi dovoljenja (lastnik: rw-, skupina: r-x, ostali: ---)
+### 2. Nastavite dovoljenja (lastnik: rw-, skupina: r-x, ostali: ---)
 ```bash
 chmod u=rw,g=rx,o= my_folder
 ```
@@ -77,13 +77,13 @@ chmod u=rw,g=rx,o= my_folder
 
 ## Uporaba chmod z mapo in podmapami
 
-### 1. Ustvari mapo in datoteke
+### 1. Ustvarite mapo in datoteke
 ```bash
 mkdir project
 touch project/file1.txt project/file2.txt
 ```
 
-### 2. Rekurzivno dodeli vsem uporabnikom rw
+### 2. Rekurzivno dodelite vsem uporabnikom rw
 ```bash
 chmod -R 666 project
 ```
@@ -92,7 +92,7 @@ chmod -R 666 project
 
 ## Vaja 3: Uporaba ukaza zip in unzip
 
-### Ustvari arhiv
+### Ustvarite arhiv
 ```bash
 mkdir archive_test
 touch archive_test/file1.txt archive_test/file2.txt archive_test/file3.txt
@@ -100,7 +100,7 @@ zip -r archive.zip archive_test
 zip -l archive.zip
 ```
 
-### Razpakiraj arhiv
+### Razpakirajte arhiv
 ```bash
 unzip archive.zip -d extracted_archive
 ```
@@ -109,7 +109,7 @@ unzip archive.zip -d extracted_archive
 
 ## Vaja 4: Uporaba ukaza tar
 
-### Ustvari tar arhiv
+### Ustvarite tar arhiv
 ```bash
 mkdir tar_test
 touch tar_test/file1.txt tar_test/file2.txt
@@ -136,7 +136,7 @@ tail -n 5 long_text.txt
 
 ## Vaja 6: Razmislek in vprašanja
 
-1. Kako preveriš dovoljenja za datoteko?  
+1. Kako preverite dovoljenja za datoteko?  
    → `ls -l <ime>`
 
 2. Razlika med simbolnim in oktalnim načinom chmod:  
