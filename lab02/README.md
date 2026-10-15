@@ -8,27 +8,60 @@ Izpolnite tabelo za spodnje primere ukazov:
 
 | Ukaz | Simbolne pravice |
 |------|------------------|
-| `chmod 121 primer1.txt` | ---w--x--x |
-| `chmod 355 primer2` | -wxr-xr-x |
-| `chmod 057 primer3.txt` | ----rwxrwx |
-| `chmod 645 primer3` | rw-r--r-x |
-| `chmod 771 primer4.txt` | rwxrwx--x |
-| `chmod 237 primer5.txt` | -w--wxrwx |
+| `chmod 121 primer1.txt` | |
+| `chmod 355 primer2` | |
+| `chmod 057 primer3.txt` | |
+| `chmod 645 primer3` | |
+| `chmod 771 primer4.txt` | |
+| `chmod 237 primer5.txt` | |
 
 ### Pretvorba iz simbolnih pravic v oktalno vrednost
+
+Prvi znak (`-` ali `d`) je tip datoteke, ne pravica. Oktalno vrednost izračunajte iz preostalih devetih znakov.
+
+| Simbolne pravice | Oktalna vrednost |
+|------------------|------------------|
+| `-rwxr--r-- primer1.txt` | |
+| `-rw-r--rwx primer2.txt` | |
+| `-rwxrw-r-- primer3.txt` | |
+| `drw-r--r-- primer4` | |
+| `-r-xr--r-- primer5.txt` | |
+| `-rw-rwxr-- primer6.txt` | |
+| `dr--rwxr-x primer7` | |
+| `-rwxrw-r-x primer8.txt` | |
+| `-r--rw-rwx primer9.txt` | |
+| `-rw-r-xrwx primer10.txt` | |
+
+<details>
+<summary>Rešitve</summary>
+
+**Simbolne pravice**
+
+| Ukaz | Simbolne pravice |
+|------|------------------|
+| `chmod 121 primer1.txt` | `--x-w---x` |
+| `chmod 355 primer2` | `-wxr-xr-x` |
+| `chmod 057 primer3.txt` | `---r-xrwx` |
+| `chmod 645 primer3` | `rw-r--r-x` |
+| `chmod 771 primer4.txt` | `rwxrwx--x` |
+| `chmod 237 primer5.txt` | `-w--wxrwx` |
+
+**Oktalne vrednosti**
 
 | Simbolne pravice | Oktalna vrednost |
 |------------------|------------------|
 | `-rwxr--r-- primer1.txt` | 744 |
-| `-rw-r--rwx primer2.txt` | 457 |
+| `-rw-r--rwx primer2.txt` | 647 |
 | `-rwxrw-r-- primer3.txt` | 764 |
-| `drw-r--r-- primer4` | 640 |
+| `drw-r--r-- primer4` | 644 |
 | `-r-xr--r-- primer5.txt` | 544 |
 | `-rw-rwxr-- primer6.txt` | 674 |
-| `dr--rwxr-x primer7` | 356 |
-| `-rwxrw-r-x primer8.txt` | 675 |
+| `dr--rwxr-x primer7` | 475 |
+| `-rwxrw-r-x primer8.txt` | 765 |
 | `-r--rw-rwx primer9.txt` | 467 |
-| `-rw-r-xrwx primer10.txt` | 457 |
+| `-rw-r-xrwx primer10.txt` | 657 |
+
+</details>
 
 ---
 
@@ -136,20 +169,20 @@ tail -n 5 long_text.txt
 
 ## Vaja 6: Razmislek in vprašanja
 
-1. Kako preverite dovoljenja za datoteko?  
-   → `ls -l <ime>`
+1. Kako preverite dovoljenja za datoteko?
+2. Kakšna je razlika med simbolnim in oktalnim načinom `chmod`?
+3. Kakšna je razlika med `zip` in `tar`?
+4. Kako prepoznate tip datoteke?
+5. Kako prikažete vrstice 11–20?
 
-2. Razlika med simbolnim in oktalnim načinom chmod:  
-   - *Simbolni*: `chmod u+r,g-w`  
-   - *Oktalni*: `chmod 754`
+<details>
+<summary>Rešitve</summary>
 
-3. Razlika med zip in tar:  
-   - **zip** kompresira vsako datoteko posebej,  
-   - **tar** samo zapakira; kompresija je ločena (`tar.gz`).
+1. `ls -l <ime>`
+2. Simbolni način spreminja posamezne pravice (`chmod u+r,g-w`). Oktalni način nastavi vse pravice naenkrat (`chmod 754`).
+3. `zip` zapakira in stisne datoteke. `tar` jih samo združi v arhiv; stiskanje je ločeno (npr. `tar.gz`).
+4. `file <ime>`
+5. `head -n 20 file | tail -n 10`
 
-4. Kako prepoznati tip datoteke?  
-   → `file <ime>`
-
-5. Kako prikazati vrstice 11–20?  
-   → `head -n 20 file | tail -n 10`
+</details>
 
