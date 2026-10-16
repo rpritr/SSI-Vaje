@@ -12,7 +12,7 @@ Pogledali bomo kako:
 
 ## 🧱 Predpogoji
 
-Vajo lahko opravite v **GitHub Codespaces** ali na Linux strežniku v **Microsoft Azure**.  
+Vajo opravite na **Linux strežniku**.  
 Vse ukaze v tej vaji izvajate v mapi `lab01`.
 
 ### GitHub Codespaces
@@ -25,7 +25,7 @@ Vse ukaze v tej vaji izvajate v mapi `lab01`.
    cd lab01
    ```
 
-### Microsoft Azure
+### Linux strežnik
 
 1. Ustvarite Linux strežnik (npr. Ubuntu Server) in se nanj povežite preko SSH:
 
@@ -40,7 +40,7 @@ Vse ukaze v tej vaji izvajate v mapi `lab01`.
    cd SSI-Vaje/lab01
    ```
 
-Če terminal kasneje odprete znova, se pred nadaljevanjem vrnite v `lab01` (`cd lab01` v Codespaces oziroma `cd SSI-Vaje/lab01` na Azure).
+Če terminal kasneje odprete znova, se pred nadaljevanjem vrnite v mapo `lab01`.
 
 ---
 

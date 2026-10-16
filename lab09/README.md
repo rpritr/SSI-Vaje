@@ -8,7 +8,7 @@ Gre za celovit projekt, ki združuje vse vsebine predmeta.
 
 # 🎯 **Cilji vaje**
 
-- Vzpostaviti **dva strežnika** v oblaku (Okeanos, Azure ali drug ponudnik)
+- Vzpostaviti **dva Linux strežnika**
 - Konfigurirati **spletni strežnik** z CMS (WordPress/Drupal/Joomla/Typo3…)
 - Pripraviti **delovni strežnik** z uporabniki, skupinami, pravicami in skupnimi mapami
 - Vzpostaviti **varnostne kopije med strežnikoma** (rsync + cron)
