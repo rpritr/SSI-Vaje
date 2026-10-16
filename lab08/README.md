@@ -6,34 +6,67 @@ Vzpostaviti osnovni spletni strežnik (LAMP sklad) na Ubuntu strežniku ter prip
 ---
 
 ## 🧱 Predpogoji
-- Ubuntu Server (npr. na **Microsoft Azure**)
-- Dostop **SSH** z uporabnikom z sudo pravicami
-- Veljaven DNS zapis za domeno *(ni nujno za del lokalnih testov)*
+
+Vajo lahko opravite v **GitHub Codespaces** ali na Linux strežniku v **Microsoft Azure**.  
+Ukaze izvajate v mapi `lab08`. Veljaven DNS zapis za domeno ni potreben.
+
+### GitHub Codespaces
+
+1. Najprej **forkajte** repozitorij na svoj GitHub račun (gumb **Fork**).
+2. Odprite **svoj fork** in v njem ustvarite Codespace: **Code → Codespaces → Create codespace**.
+3. V terminalu se premaknite v mapo vaje:
+
+   ```bash
+   cd lab08
+   ```
+
+Codespaces nima **systemd**. Storitve zaženite z `sudo service ... start`, ne s `systemctl`.  
+Po ponovnem odprtju Codespaces Apache in MySQL znova zaženite z ukazoma `sudo service apache2 start` in `sudo service mysql start`.
+
+Spletno stran odprete v zavihku **Ports** (vrata **80** → **Open in Browser**). Naslov je oblike `https://<ime>-80.app.github.dev`. Požarnega zidu UFW v Codespaces ne vklapljajte.
+
+### Microsoft Azure
+
+1. Ustvarite Linux strežnik (npr. Ubuntu Server) in se nanj povežite preko SSH:
+
+   ```bash
+   ssh uporabnisko_ime@ip_naslov
+   ```
+
+2. Klonirajte repozitorij in se premaknite v mapo vaje:
+
+   ```bash
+   git clone https://github.com/rpritr/SSI-Vaje.git
+   cd SSI-Vaje/lab08
+   ```
+
+Na Azure lahko storitve dodatno omogočite ob zagonu (`sudo systemctl enable apache2` in `sudo systemctl enable mysql`). Stran odprete na `http://<IP_STREZNIKA>/`.
 
 ---
 
 ## 🧮 Vaja 2.1: Namestitev Apache2, MySQL in PHP (LAMP)
 
-1) Posodobi pakete in namesti **Apache2**:
+1) Posodobi seznam paketov in namesti **Apache2**:
 ```bash
-sudo apt update && sudo apt -y upgrade
+sudo apt update
 sudo apt -y install apache2
-sudo systemctl enable --now apache2
+sudo service apache2 start
 ```
 
-2) (Priporočeno) Odpri dostop prek **UFW** požarnega zidu:
+2) **Samo na Azure.** Odpri dostop prek požarnega zidu **UFW** (v Codespaces ta korak preskočite):
 ```bash
 sudo ufw allow 'Apache Full'
 sudo ufw status
 ```
 
-3) Namesti **MySQL strežnik** in zaženi varnostni čarovnik:
+3) Namesti **MySQL** in ga zaženi:
 ```bash
 sudo apt -y install mysql-server
-sudo systemctl enable --now mysql
+sudo service mysql start
 sudo mysql_secure_installation
 ```
-> V čarovniku nastavite geslo za **root** (oz. izberite varnostne nastavitve po navodilih).
+> V čarovniku nastavite geslo za **root** (oz. izberite varnostne nastavitve po navodilih).  
+> Na Ubuntu se lahko v MySQL prijavite tudi brez gesla: `sudo mysql` (prijava prek sistemskega uporabnika). Če čarovnik javi napako, nadaljujte s tem ukazom.
 
 4) (Neobvezno) Ustvari bazo in uporabnika za prihodnji projekt:
 ```bash
@@ -45,14 +78,17 @@ sudo mysql -e "GRANT ALL PRIVILEGES ON projekt_db.* TO 'projekt_user'@'localhost
 5) Namesti **PHP** in povezovalne module:
 ```bash
 sudo apt -y install php libapache2-mod-php php-mysql php-cli php-curl php-xml php-mbstring
+sudo service apache2 restart
 php -v
 ```
 
-6) Preveri PHP s testno datoteko (neobvezno):
+6) Preveri PHP s testno datoteko:
 ```bash
 echo "<?php phpinfo(); ?>" | sudo tee /var/www/html/info.php > /dev/null
-# Odpri v brskalniku: http://<IP_STREZNIKA>/info.php
+curl -I http://127.0.0.1/info.php
 ```
+- **Codespaces:** v zavihku **Ports** odprite vrata **80**. V brskalniku odprite `/info.php`.
+- **Azure:** v brskalniku odprite `http://<IP_STREZNIKA>/info.php`.
 
 ---
 
@@ -130,10 +166,11 @@ echo ">>> Preverjam sintakso Apache..."
 sudo apache2ctl configtest
 
 echo ">>> Reload Apache..."
-sudo systemctl reload apache2
+sudo service apache2 reload
 
 echo ">>> Končano. Preveri: http://$DOMAIN/"
-echo ">>> (Za lokalni test lahko dodaš v /etc/hosts:   <IP_STREZNIKA>  $DOMAIN www.$DOMAIN)"
+echo ">>> Codespaces: v /etc/hosts dodaj  127.0.0.1  $DOMAIN www.$DOMAIN  in preveri s curl."
+echo ">>> Azure: na odjemalcu v /etc/hosts dodaj  <IP_STREZNIKA>  $DOMAIN www.$DOMAIN"
 ```
 
 Skripto naredi izvršljivo in jo zaženi (z **sudo**):
@@ -142,29 +179,48 @@ chmod +x create-vhost.sh
 sudo ./create-vhost.sh primer.test
 ```
 
-> Če testirate **lokalno**, dodajte v `/etc/hosts` (na odjemalcu):
+Preverite VirtualHost **znotraj** strežnika (to deluje v Codespaces in na Azure):
+
+```bash
+echo "127.0.0.1 primer.test www.primer.test" | sudo tee -a /etc/hosts
+curl -I http://primer.test/
+```
+
+Na **Azure** lahko isto domeno odprete tudi v brskalniku na svojem računalniku. V `/etc/hosts` na odjemalcu dodajte:
+
 ```bash
 echo "<IP_STREZNIKA> primer.test www.primer.test" | sudo tee -a /etc/hosts
 ```
 
-### ✅ Dodatno (neobvezno): onemogoči privzeto stran in omogoči HTTPS
+V **Codespaces** brskalnik odpre naslov `*.app.github.dev`, ne `primer.test`. Da v brskalniku vidite stran VirtualHosta, onemogočite privzeto stran (Apache jo nato uporabi za vsak zahtevek na vratih 80):
+
 ```bash
-# Onemogoči 000-default, če ni potreben
 sudo a2dissite 000-default.conf
-sudo systemctl reload apache2
+sudo service apache2 reload
+```
+
+Nato v zavihku **Ports** znova odprite vrata **80**. V brskalniku se pokaže `index.html` domene `primer.test`. Datoteka `/info.php` je na privzeti strani v `/var/www/html` in po tem koraku ni več prikazana.
+
+### ✅ Dodatno (neobvezno, samo Azure): onemogoči privzeto stran in omogoči HTTPS
+
+```bash
+sudo a2dissite 000-default.conf
+sudo service apache2 reload
 
 # Če ima domena javni DNS in je dostopna iz interneta:
 # sudo apt -y install certbot python3-certbot-apache
 # sudo certbot --apache -d primer.tld -d www.primer.tld
 ```
 
+V Codespaces certbot ne uporabite. HTTPS do posredovanih vrat zagotovi GitHub.
+
 ---
 
 ## 🧪 Preverjanje delovanja
-- `curl -I http://<domena>` mora vrniti **HTTP/1.1 200 OK**
+- `curl -I http://primer.test/` mora vrniti **HTTP/1.1 200 OK**
 - Dnevnik napak: `/var/log/apache2/<domena>_error.log`
 - Dnevnik dostopov: `/var/log/apache2/<domena>_access.log`
-- PHP test: `http://<IP>/info.php` (če ste ustvarili testno datoteko)
+- PHP test: `/info.php` (Codespaces: vrata 80 v zavihku Ports; Azure: `http://<IP>/info.php`)
 
 ---
 
@@ -176,11 +232,14 @@ sudo systemctl reload apache2
 ---
 
 ## 🧰 Reševanje pogostih težav
+- `System has not been booted with systemd` → ste v Codespaces. Namesto `systemctl` uporabite `sudo service apache2 start` in `sudo service mysql start`.
+- Po ponovnem odprtju Codespaces storitvi ne tečeta sami od sebe. Znova ju zaženite z `service`.
+- Vrata 80 se ne odprejo v brskalniku → v zavihku **Ports** kliknite **Open in Browser**. Apache mora pred tem teči (`sudo service apache2 status`).
 - `sudo echo ... >> /etc/...` ne deluje → uporabi **sudo tee** z **heredoc** (kot v skripti).
 - `AH00558: apache2: Could not reliably determine the server's fully qualified domain name` → nastavi `ServerName` globalno v `/etc/apache2/apache2.conf` ali v vhost.
 - **403 Forbidden** → preveri pravice in `<Directory>` blok v vhostu.
 - **500 / .htaccess** → preveri sintakso `.htaccess` ter omogočen `AllowOverride All`.
-- Po spremembah vedno: `sudo apache2ctl configtest && sudo systemctl reload apache2`.
+- Po spremembah vedno: `sudo apache2ctl configtest && sudo service apache2 reload`.
 
 ---
 
